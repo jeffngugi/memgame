@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 interface GameBoardProps {
   cards: Card[];
   difficulty: DifficultyLevel;
+  isPreviewing: boolean; // Add isPreviewing prop
   onCardClick: (cardId: number) => void;
 }
 
@@ -38,7 +39,7 @@ const getGapSize = (difficulty: DifficultyLevel) => {
   }
 };
 
-const GameBoard = memo(({ cards, difficulty, onCardClick }: GameBoardProps) => {
+const GameBoard = memo(({ cards, difficulty, isPreviewing, onCardClick }: GameBoardProps) => {
   const gridClasses = getDifficultyGridClasses(difficulty);
   const gapSize = getGapSize(difficulty);
 
@@ -57,6 +58,7 @@ const GameBoard = memo(({ cards, difficulty, onCardClick }: GameBoardProps) => {
           <GameCard 
             key={card.id}
             card={card}
+            isPreviewing={isPreviewing} // Pass preview state to card
             onClick={() => onCardClick(card.id)}
           />
         ))}

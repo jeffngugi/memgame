@@ -279,6 +279,7 @@ export function useMemoryGame({ onGameComplete }: UseMemoryGameOptions = {}) {
     setDifficulty: handleSetDifficulty,
     isPlaying,
     isGameComplete,
+    isPreviewing: !isPlaying && !isGameComplete && cards.length > 0, // Show preview when the game isn't started but cards exist
     timer,
     moves,
     matchedPairs,

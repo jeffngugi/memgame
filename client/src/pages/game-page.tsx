@@ -21,6 +21,7 @@ export default function GamePage() {
     setDifficulty,
     isPlaying,
     isGameComplete,
+    isPreviewing,
     timer,
     moves,
     matchedPairs,
@@ -70,6 +71,11 @@ export default function GamePage() {
       <div className="w-full max-w-4xl mb-8">
         <h1 className="text-4xl font-bold text-center text-primary mb-2">Memory Card Game</h1>
         <p className="text-center text-muted-foreground mb-6">Flip the cards and find the matching pairs!</p>
+        {isPreviewing && (
+          <div className="w-full rounded-lg bg-primary/10 p-3 mb-4 border border-primary text-center text-primary font-medium animate-pulse">
+            Memorize the cards! Game will start in a few seconds...
+          </div>
+        )}
         
         {/* Game Controls */}
         <GameControls 
@@ -97,6 +103,7 @@ export default function GamePage() {
       <GameBoard 
         cards={cards}
         difficulty={difficulty}
+        isPreviewing={isPreviewing}
         onCardClick={flipCard}
       />
       

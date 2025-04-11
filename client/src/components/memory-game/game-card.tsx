@@ -5,11 +5,15 @@ import { getCardIcon } from "@/lib/card-icons";
 
 interface GameCardProps {
   card: Card;
+  isPreviewing?: boolean; // Add preview state prop
   onClick: () => void;
 }
 
-const GameCard = memo(({ card, onClick }: GameCardProps) => {
+const GameCard = memo(({ card, isPreviewing = false, onClick }: GameCardProps) => {
   const { id, value, isFlipped, isMatched, isMismatched } = card;
+  
+  // Card should be shown if it's flipped OR we're in preview mode
+  const showCardFace = isFlipped || isPreviewing;
 
   // Card animation variants
   const cardVariants = {
@@ -47,11 +51,11 @@ const GameCard = memo(({ card, onClick }: GameCardProps) => {
       }}
     >
       <div className="card w-full h-full perspective-1000 relative">
-        {/* Front of card (hidden when flipped) */}
+        {/* Front of card (hidden when flipped or previewing) */}
         <motion.div
           className="absolute w-full h-full rounded-lg shadow-md bg-card-back flex items-center justify-center"
           style={{ backfaceVisibility: "hidden" }}
-          animate={isFlipped ? "flipped" : "unflipped"}
+          animate={showCardFace ? "flipped" : "unflipped"}
           variants={cardVariants}
           transition={{ duration: 0.6, ease: "easeInOut" }}
         >
@@ -61,12 +65,13 @@ const GameCard = memo(({ card, onClick }: GameCardProps) => {
           </svg>
         </motion.div>
 
-        {/* Back of card (visible when flipped) */}
+        {/* Back of card (visible when flipped or previewing) */}
         <motion.div
           className={`absolute w-full h-full rounded-lg shadow-md flex items-center justify-center 
-                    ${isMatched ? 'bg-secondary/90' : 'bg-white'}`}
+                    ${isMatched ? 'bg-secondary/90' : 'bg-white'}
+                    ${isPreviewing ? 'border-2 border-primary' : ''}`} // Add border during preview
           style={{ backfaceVisibility: "hidden", rotateY: 180 }}
-          animate={isFlipped ? "flipped" : "unflipped"}
+          animate={showCardFace ? "flipped" : "unflipped"}
           variants={cardVariants}
           transition={{ duration: 0.6, ease: "easeInOut" }}
         >
