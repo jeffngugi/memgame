@@ -12,7 +12,8 @@ interface GameCardProps {
 const GameCard = memo(({ card, isPreviewing = false, onClick }: GameCardProps) => {
   const { id, value, isFlipped, isMatched, isMismatched } = card;
   
-  // Card should be shown if it's flipped OR we're in preview mode
+  // Card should be shown if it's been flipped by the player OR we're in preview mode
+  // We separate these states to make sure the card flip animation works properly
   const showCardFace = isFlipped || isPreviewing;
 
   // Card animation variants

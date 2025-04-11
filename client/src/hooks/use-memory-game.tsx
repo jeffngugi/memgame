@@ -98,16 +98,16 @@ export function useMemoryGame({ onGameComplete }: UseMemoryGameOptions = {}) {
     // Generate and shuffle cards based on difficulty
     const newCards = shuffleCards(generateCards(totalPairs));
     
-    // First show all cards (preview)
-    const previewCards = newCards.map(card => ({
+    // Create cards in their initial state (not flipped)
+    const initialCards = newCards.map(card => ({
       ...card,
-      isFlipped: true,  // All cards start flipped so players can see them
+      isFlipped: false,
       isMatched: false,
       isMismatched: false
     }));
     
-    setCards(previewCards);
-    setIsPlaying(false); // Don't start gameplay immediately
+    setCards(initialCards);
+    setIsPlaying(false); // Don't start gameplay immediately during preview phase
     setIsGameComplete(false);
     setFlippedCards([]);
     setMatchedPairs(0);
@@ -123,14 +123,8 @@ export function useMemoryGame({ onGameComplete }: UseMemoryGameOptions = {}) {
       setTimer(120);
     }
     
-    // After a delay, hide the cards and start the game
+    // After the preview period, start the actual game
     setTimeout(() => {
-      setCards(prevCards => 
-        prevCards.map(card => ({
-          ...card,
-          isFlipped: false // Hide all cards
-        }))
-      );
       setIsPlaying(true); // Now start the game
     }, 3000); // 3 seconds preview time
   }, [difficulty, totalPairs]);
