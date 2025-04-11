@@ -13,6 +13,7 @@ interface GameContextType {
   isPlaying: boolean;
   isLoading: boolean;
   isVictory: boolean;
+  isPreviewing: boolean; // Added for card preview state
   flippedCards: number[];
   gameConfig: {
     rows: number;
@@ -38,6 +39,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [time, setTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVictory, setIsVictory] = useState(false);
+  const [isPreviewing, setIsPreviewing] = useState(false); // Add preview state
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
   const [matchedPairs, setMatchedPairs] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -101,10 +103,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
     refetch().then(() => {
       setScore(0);
       setTime(0);
-      setIsPlaying(true);
       setIsVictory(false);
       setFlippedCards([]);
       setMatchedPairs(0);
+      
+      // Set preview mode and temporarily show all cards
+      setIsPreviewing(true);
+      setIsPlaying(false);
+      
+      // After a short delay, hide cards and start the game
+      setTimeout(() => {
+        setIsPreviewing(false);
+        setIsPlaying(true);
+      }, 3000); // 3 seconds to preview cards
     });
   };
   
@@ -198,6 +209,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     isPlaying,
     isLoading,
     isVictory,
+    isPreviewing,  // Add isPreviewing state to the context value
     flippedCards,
     gameConfig,
     
