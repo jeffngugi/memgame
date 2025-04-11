@@ -30,6 +30,7 @@ export default function GamePage() {
     soundEnabled,
     setSoundEnabled,
     startGame,
+    beginGameplay,
     resetGame,
     flipCard,
   } = useMemoryGame({
@@ -72,8 +73,16 @@ export default function GamePage() {
         <h1 className="text-4xl font-bold text-center text-primary mb-2">Memory Card Game</h1>
         <p className="text-center text-muted-foreground mb-6">Flip the cards and find the matching pairs!</p>
         {isPreviewing && (
-          <div className="w-full rounded-lg bg-primary/10 p-3 mb-4 border border-primary text-center text-primary font-medium animate-pulse">
-            Memorize the cards! Game will start in a few seconds...
+          <div className="w-full rounded-lg bg-primary/10 p-4 mb-4 border border-primary text-center">
+            <p className="text-primary font-medium mb-3">
+              Memorize the cards - they are face up now!
+            </p>
+            <button 
+              onClick={beginGameplay}
+              className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-6 rounded-lg transition-colors"
+            >
+              I've Memorized - Start Game
+            </button>
           </div>
         )}
         

@@ -93,20 +93,20 @@ export function useMemoryGame({ onGameComplete }: UseMemoryGameOptions = {}) {
     }
   }, [matchedPairs, totalPairs, isPlaying, playSound, onGameComplete]);
 
-  // Start a new game
+  // Start a new game - this now just prepares the cards in face-up position
   const startGame = useCallback(() => {
     // Generate and shuffle cards based on difficulty
     const newCards = shuffleCards(generateCards(totalPairs));
     
-    // Create cards in their initial state (not flipped)
-    const initialCards = newCards.map(card => ({
+    // Create cards in preview state (all face up)
+    const previewCards = newCards.map(card => ({
       ...card,
-      isFlipped: false,
+      isFlipped: true, // All cards start face up for preview
       isMatched: false,
       isMismatched: false
     }));
     
-    setCards(initialCards);
+    setCards(previewCards);
     setIsPlaying(false); // Don't start gameplay immediately during preview phase
     setIsGameComplete(false);
     setFlippedCards([]);
@@ -123,10 +123,7 @@ export function useMemoryGame({ onGameComplete }: UseMemoryGameOptions = {}) {
       setTimer(120);
     }
     
-    // After the preview period, start the actual game
-    setTimeout(() => {
-      setIsPlaying(true); // Now start the game
-    }, 3000); // 3 seconds preview time
+    // We don't auto-start the game anymore - player will click to start when ready
   }, [difficulty, totalPairs]);
   
   // Reset the game
@@ -267,6 +264,22 @@ export function useMemoryGame({ onGameComplete }: UseMemoryGameOptions = {}) {
     setDifficulty(newDifficulty);
   }, []);
 
+  // Begin gameplay after memorizing cards
+  const beginGameplay = useCallback(() => {
+    // Flip all cards face down
+    setCards(prevCards => 
+      prevCards.map(card => ({
+        ...card,
+        isFlipped: false,
+        isMatched: false,
+        isMismatched: false
+      }))
+    );
+    
+    // Start the game
+    setIsPlaying(true);
+  }, []);
+
   return {
     cards,
     difficulty,
@@ -282,6 +295,7 @@ export function useMemoryGame({ onGameComplete }: UseMemoryGameOptions = {}) {
     soundEnabled,
     setSoundEnabled,
     startGame,
+    beginGameplay, // Add the new function to the return object
     resetGame,
     flipCard,
   };
